@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文字コード一覧表示</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; line-height: 1.6; }
+        .container { max-width: 600px; background: #f4f4f4; padding: 20px; border-radius: 8px; }
+        .input-group { margin-bottom: 10px; }
+        label { display: inline-block; width: 180px; }
+        input { padding: 5px; width: 100px; }
+        button { padding: 5px 15px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 4px; }
+        button:hover { background: #0056b3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; font-family: monospace; }
+        th { background: #eee; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>文字コード表示ツール</h2>
+    
+    <div class="input-group">
+        <label for="hexCode">開始コード (16進数):</label>
+        <input type="text" id="hexCode" value="0e01">
+    </div>
+    
+    <div class="input-group">
+        <label for="charNum">表示する個数:</label>
+        <input type="number" id="charNum" value="10" min="1">
+    </div>
+    
+    <button onclick="generateTable()">実行</button>
+
+    <table id="resultTable">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Hex</th>
+                <th>Dec</th>
+                <th>Char</th>
+            </tr>
+        </thead>
+        <tbody id="resultBody">
+            </tbody>
+    </table>
+</div>
+
+<script>
+    function generateTable() {
+        const hexInput = document.getElementById('hexCode').value;
+        const numInput = parseInt(document.getElementById('charNum').value);
+        const tbody = document.getElementById('resultBody');
+        
+        // 入力値のクリア
+        tbody.innerHTML = '';
+
+        // 16進数を10進数に変換
+        let startCode = parseInt(hexInput, 16);
+
+        if (isNaN(startCode) || isNaN(numInput)) {
+            alert("有効な数値を入力してください。");
+            return;
+        }
+
+        for (let i = 0; i < numInput; i++) {
+            let currentCode = startCode + i;
+            // 数値から文字へ変換
+            let char = String.fromCodePoint(currentCode);
+
+            let row = `<tr>
+                <td>${i}</td>
+                <td>${currentCode.toString(16).toUpperCase()}</td>
+                <td>${currentCode}</td>
+                <td style="font-size: 1.2em;">${char}</td>
+            </tr>`;
+            
+            tbody.innerHTML += row;
+        }
+    }
+</script>
+
+</body>
+</html>
+
